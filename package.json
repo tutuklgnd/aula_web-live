@@ -1,11 +1,11 @@
 {
-  "name": "proj_html",
+  "name": "projeto",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "backend.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "nodemon backend.js"
   },
   "keywords": [],
   "author": "",
@@ -13,7 +13,9 @@
   "type": "commonjs",
   "dependencies": {
     "cors": "^2.8.6",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "mongoose": "^9.11.4",
+    "mongoose-unique-validator": "^6.1.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
