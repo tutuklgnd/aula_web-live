@@ -1,7 +1,9 @@
 const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
-const uniqueValidator = require('mongoose-unique-validator')
+const uniqueValidator = require('mongoose-unique-validator').default
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const app = express()
 app.use(express.json())
 app.use(cors())
@@ -55,27 +57,54 @@ app.post('/filmes', async (req, res) => {
 })
 
 app.post('/signup', async (req, res) =>{
+    try {
+        const login = req.body.login
+        const password = req.body.password
+        const passCriptografado = await bcrypt.hash (password,10)
+        const usuario = new Usuario({
+        login: login,
+        password: passCriptografado
+    })
+        const respostaMongo = await usuario.save()
+        console.log(respostaMongo)
+        res.status(201).end()
+    
+}
+    catch (e) {
+        console.log(e)
+        res.status(409).end()
+    }
+
+})
+
+app.post('/login', async (req,res) => {
     const login = req.body.login
     const password = req.body.password
-    const usuario = new Usuario({
-        login: login,
-        password: password
-    })
-    const respostaMongo = await usuario.save()
-    console.log(respostaMongo)
+    const usuario = await Usuario.findOne({login: login})
+    if (!usuario) return res.status(401).json({mensagem: "login inválido"})
+    const senhaValida = await bcrypt.compare(password, usuario.password)
+    if (!senhaValida) return res.status(401).json({mensagem: "senha inválida"})
+    const token = jwt.sign (
+        {login: login},
+        "chave-secreta",
+        {expiresIn: "60min"}    
+    )
+    res.status(200).json({token: token})
     res.end()
 })
 
-async function conectarAoMongo () {
-    await mongoose.connect(`mongodb+srv://antaxeyt_db_user:Antonio1227*@mauasp.mnv6e1d.mongodb.net/`)
+async function conectarAoMongo() {
+    await mongoose.connect(
+        'mongodb+srv://antoArm:coslk7jT8X5CGkZ9@aulaweb.z21asxr.mongodb.net/'
+    )
 }
 
-app.listen(3000, () => {
+app.listen(3000, async () => {
     try {
-        conectarAoMongo()
+        await conectarAoMongo()
         console.log ("server up & running & mongo connected")
     }
     catch (e) {
-        console.log("erro: ", e)
+        console.log("erro: ", e.reason?.servers ?? e)
     }
 })    
