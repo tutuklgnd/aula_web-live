@@ -1,6 +1,6 @@
+
 const protocolo = 'http://'
 const baseURL = 'localhost:3000'
-const filmesEndpoint = '/filmes'
 
 async function obterFilmes() {
     const filmesEndpoint = '/filmes'
@@ -50,11 +50,13 @@ async function cadastrarFilme() {
         }, 2000)
     }
 }
+
 async function cadastrarUsuario () {
-    const usuarioEndpoint = '/signup'
-    let usuarioCadastroInput = document.querySelector('#UsuarioCadastroInput')
+    const cadastroUsuarioEndpoint = '/signup'
+    let usuarioCadastroInput = document.querySelector('#usuarioCadastroInput')
     let passwordCadastroInput = document.querySelector('#passwordCadastroInput')
     let usuarioCadastro = usuarioCadastroInput.value
+    let passwordCadastro = passwordCadastroInput.value
     if (usuarioCadastro && passwordCadastro) {
 
     }
@@ -63,8 +65,8 @@ async function cadastrarUsuario () {
         alert.classList.add('show')
         alert.classList.remove('d-none')
         setTimeout(() => {
-            alert.classList.add('d-none'),
-            alert.classList.remove('show'),
-        }
+            alert.classList.add('d-none')
+            alert.classList.remove('show')
+        }, 2000)
     }
 }
